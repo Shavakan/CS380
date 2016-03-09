@@ -8,10 +8,10 @@ if( CMAKE_BINARY_DIR STREQUAL CMAKE_SOURCE_DIR )
     message( FATAL_ERROR "Please select another Build Directory" )
 endif()
 if( CMAKE_SOURCE_DIR MATCHES " " )
-	message( "Your Source Directory contains spaces. If you experience problems when compiling, this can be the cause." )
+  message( "Your Source Directory contains spaces. If you experience problems when compiling, this can be the cause." )
 endif()
 if( CMAKE_BINARY_DIR MATCHES " " )
-	message( "Your Build Directory contains spaces. If you experience problems when compiling, this can be the cause." )
+  message( "Your Build Directory contains spaces. If you experience problems when compiling, this can be the cause." )
 endif()
 
 # Compile external dependencies
@@ -23,7 +23,7 @@ include(CreateLaunchers)
 include(MSVCMultipleProcessCompile) # /MP
 
 if(INCLUDE_DISTRIB)
-	add_subdirectory(distrib)
+  add_subdirectory(distrib)
 endif(INCLUDE_DISTRIB)
 
 include_directories(
@@ -49,12 +49,18 @@ add_definitions(
 
 # Skeleton Project
 add_executable(SkeletonProject
-  Skeleton/main.cpp
+  # Skeleton/main.cpp
+  Lab1/main.cpp
   common/shader.cpp
   common/shader.hpp
 
-  Skeleton/TransformVertexShader.glsl
-  Skeleton/ColorFragmentShader.glsl
+# Project 0
+  # Skeleton/TransformVertexShader.glsl
+  # Skeleton/ColorFragmentShader.glsl
+
+# Project 1
+  Lab1/VertexShader.glsl
+  Lab1/FragmentShader.glsl
 )
 
 target_link_libraries(SkeletonProject
