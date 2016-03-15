@@ -37,7 +37,30 @@ float degree = 0.0f;
 // TODO: Implement koch snowflake
 void koch_line(glm::vec3 a, glm::vec3 b, int iter)
 {
+    if (iter < 0)
+        return;
 
+    glm::vec3 normal = glm::vec3(-(a.y - b.y), -(b.x - a.x), 0.0f);
+    glm::vec3 c = (float)(sqrt(3.0f) / 6.0f) * normal + (a + b) / 2.0f;
+    glm::vec3 c1 = (float)(sqrt(3.0f) / 6.0f) * -1 * normal + (a + b) / 2.0f;
+    glm::vec3 d = (2.0f * a + b) / 3.0f;
+    glm::vec3 e = (a + 2.0f * b) / 3.0f;
+
+    g_vertex_buffer_data.push_back(c);
+    g_vertex_buffer_data.push_back(d);
+    g_vertex_buffer_data.push_back(e);
+    g_vertex_buffer_data.push_back(c1);
+    g_vertex_buffer_data.push_back(d);
+    g_vertex_buffer_data.push_back(e);
+
+    koch_line(a, d, iter-1);
+    koch_line(b, e, iter-1);
+    koch_line(c, d, iter-1);
+    koch_line(d, e, iter-1);
+    koch_line(e, c, iter-1);
+    koch_line(c1, d, iter-1);
+    koch_line(d, e, iter-1);
+    koch_line(e, c1, iter-1);
 }
 
 // TODO: Initialize model
@@ -48,6 +71,10 @@ void init_model(void)
     g_vertex_buffer_data.push_back(glm::vec3(-0.5f, -0.25f, 0.0f));
     g_vertex_buffer_data.push_back(glm::vec3(0.5f, -0.25f, 0.0f));
     g_vertex_buffer_data.push_back(glm::vec3(0.0f, sqrt(0.75)-0.25f, 0.0f));
+
+    koch_line(g_vertex_buffer_data[0], g_vertex_buffer_data[1], 5);
+    koch_line(g_vertex_buffer_data[1], g_vertex_buffer_data[2], 5);
+    koch_line(g_vertex_buffer_data[2], g_vertex_buffer_data[0], 5);
 
     // Generates Vertex Array Objects in the GPU's memory and passes back their identifiers
     // Create a vertex array object that represents vertex attributes stored in a vertex buffer object.
@@ -70,8 +97,14 @@ void draw_model()
     glBindBuffer(GL_ARRAY_BUFFER, VBID);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), BUFFER_OFFSET(0));
 
-    glm::mat4 Model = glm::mat4(1.0f);
-    glm::mat4 MVP = Projection * View * Model;
+    degree += 0.5f;
+    glm::mat4 rotation = glm::rotate(degree, glm::vec3(0, 0, 1));
+    glm::mat4 translation = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
+    glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.5f, 0.5f, 0.0f));
+    glm::mat4 RBT = translation * rotation;
+    // glm::mat4 Model = glm::mat4(1.0f);
+    // glm::mat4 MVP = Projection * View * Model;
+    glm:mat4 MVP = Projection * View * RBT * scale;
 
     GLuint MatrixID = glGetUniformLocation(programID, "MVP");
     glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVP[0][0]);
