@@ -49,24 +49,62 @@ add_definitions(
 
 # Skeleton Project
 add_executable(SkeletonProject
-  # Skeleton/main.cpp
-  Lab1/main.cpp
-  common/shader.cpp
-  common/shader.hpp
+    Skeleton/main.cpp
+    common/shader.cpp
+    common/shader.hpp
 
-# Project 0
-  # Skeleton/TransformVertexShader.glsl
-  # Skeleton/ColorFragmentShader.glsl
-
-# Project 1
-  Lab1/VertexShader.glsl
-  Lab1/FragmentShader.glsl
+    Skeleton/TransformVertexShader.glsl
+    Skeleton/ColorFragmentShader.glsl
 )
 
 target_link_libraries(SkeletonProject
-  ${ALL_LIBS}
+    ${ALL_LIBS}
 )
 
 # Xcode and Visual Studio working directories
 set_target_properties(SkeletonProject PROPERTIES XCODE_ATTRIBUTE_CONFIGURATION_BUILD_DIR "${CMAKE_CURRENT_SOURCE_DIR}/Skeleton/")
 create_target_launcher(SkeletonProject WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/Skeleton/")
+
+
+# Lab session 1
+add_executable(Lab1
+    Lab1/main.cpp
+
+    common/shader.cpp
+    common/shader.hpp
+
+    Lab1/VertexShader.glsl
+    Lab1/FragmentShader.glsl
+)
+target_link_libraries(Lab1
+    ${ALL_LIBS}
+)
+
+# Xcode and Visual Studio working directories
+set_target_properties(Lab1 PROPERTIES XCODE_ATTRIBUTE_CONFIGURATION_BUILD_DIR
+    "${CMAKE_CURRENT_SOURCE_DIR}/Lab1/")
+create_target_launcher(Lab1 WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/Lab1/")
+
+
+# Lab session 2
+add_executable(Lab2
+    Lab2/main.cpp
+
+    common/shader.cpp
+    common/shader.hpp
+    common/model.cpp
+    common/model.hpp
+
+    Lab2/VertexShader.glsl
+    Lab2/FragmentShader.glsl
+)
+target_link_libraries(Lab2
+    ${ALL_LIBS}
+)
+
+# Xcode and Visual Studio working directories
+set_target_properties(Lab2 PROPERTIES XCODE_ATTRIBUTE_CONFIGURATION_BUILD_DIR
+    "${CMAKE_CURRENT_SOURCE_DIR}/Lab2/")
+create_target_launcher(Lab2 WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/Lab2/")
+
+
