@@ -44,6 +44,44 @@ GLuint programID;
 GLuint VAID;
 GLuint VBID;
 
+/* For coloring objects */
+GLuint vertexbuffer;
+GLuint colorbuffer;
+GLuint whitebuffer;
+static const GLfloat g_vertex_buffer_data[] = {
+    -1.2f, 1.0f, 0.0f,
+    1.2f, 1.0f, 0.0f,
+    1.2f, -0.5f, 0.0f,
+    -1.2f, 1.0f, 0.0f,
+    1.2f, -0.5f, 0.0f,
+    -1.2f, -0.5f, 0.0f,
+
+    -1.2f, -0.5f, 0.0f,
+    1.2f, -0.5f, 0.0f,
+    1.2f, -1.0f, 0.0f,
+    -1.2f, -0.5f, 0.0f,
+    1.2f, -1.0f, 0.0f,
+    -1.2f, -1.0f, 0.0f,
+};
+// std::vector<float> g_color_buffer_data;
+static const GLfloat g_color_buffer_data[] = {
+    0.0f, 0.0f, 0.3f,
+    0.0f, 0.0f, 0.3f,
+    1.0f, 1.0f, 1.0f,
+    0.0f, 0.0f, 0.3f,
+    1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f,
+
+    1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f,
+    0.54f, 0.27f, 0.07f,
+    1.0f, 1.0f, 1.0f,
+    0.54f, 0.27f, 0.07f,
+    0.54f, 0.27f, 0.07f,
+};
+std::vector<float> g_white_buffer_data;
+
+
 std::vector<Snowflake> flakes;
 
 glm::mat4 Projection;
@@ -129,6 +167,12 @@ void Snowflake::koch_line(glm::vec3 a, glm::vec3 b, int iter)
 // TODO: Initialize model
 void init_model(void)
 {
+    /* Generate color vertex array */
+    Snowflake flake;
+    for (int i=0; i<flake.vertices.size() * 3; i++) {
+        g_white_buffer_data.push_back(1.0f);
+    }
+    std::cout<<g_white_buffer_data.size();
 	/* Generate multiple Koch-curves */
 	for (int i = 0; i < NUM_FLAKES; i++) {
 		Snowflake flake;
@@ -146,6 +190,20 @@ void init_model(void)
 	for (int i = 0; i < flakes.size(); i++) {
 		glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3) * flakes[i].vertices.size(), &flakes[i].vertices[0], GL_STATIC_DRAW);
 	}
+
+    /* For coloring objects */
+    glGenBuffers(1, &vertexbuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data), g_vertex_buffer_data, GL_STATIC_DRAW);
+
+    glGenBuffers(1, &colorbuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, colorbuffer);
+    // glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3) * g_color_buffer_data.size(), &g_color_buffer_data[0], GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(g_color_buffer_data), g_color_buffer_data, GL_STATIC_DRAW);
+
+    glGenBuffers(1, &whitebuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, whitebuffer);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3) * g_white_buffer_data.size(), &g_white_buffer_data.front(), GL_STATIC_DRAW);
 }
 
 // TODO: Draw model
@@ -153,6 +211,11 @@ void draw_model()
 {
 	glUseProgram(programID);
 	glBindVertexArray(VAID);
+
+    glEnableVertexAttribArray(1);
+    glBindBuffer(GL_ARRAY_BUFFER, whitebuffer);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, (void *) 0);
+
 	glEnableVertexAttribArray(0);
 	glBindBuffer(GL_ARRAY_BUFFER, VBID);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), BUFFER_OFFSET(0));
@@ -226,7 +289,18 @@ void draw_model()
 		}
 	}
 
-	glDisableVertexAttribArray(0);
+    /* For background objects */
+    glBindBuffer(GL_ARRAY_BUFFER, colorbuffer);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, (void *) 0);
+    glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void *) 0);
+    glm::mat4 Model = glm::mat4(1.0f);
+    glm::mat4 MVP = Projection * View * Model;
+    GLuint MatrixID = glGetUniformLocation(programID, "MVP");
+    glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVP[0][0]);
+    glDrawArrays(GL_TRIANGLES, 0, sizeof(g_vertex_buffer_data));
+    glDisableVertexAttribArray(0);
+    glDisableVertexAttribArray(1);
 }
 
 int main(int argc, char* argv[])
