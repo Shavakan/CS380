@@ -48,16 +48,16 @@ std::vector<Snowflake> flakes;
 
 glm::mat4 Projection;
 glm::mat4 View;
-// float degree = 0.0f;
-static const int NUM_FLAKES = 300;
-static const int MAX_NUM_FLAKES = 1000;
+
+static const int NUM_FLAKES = 30;
+static const int MAX_NUM_FLAKES = 800;
 static const float MIN_SCALE = 0.01f;
 static const float MAX_SCALE = 0.03f;
 static const float WIND_MIN = -0.15f;
 static const float WIND_MAX = 0.2f;
 static const float WIND_SCALE = 0.001f;
 static const float GRAVITY_MIN = 0.005f;
-static const float GRAVITY_SCALE = 0.0001f;
+static const float GRAVITY_SCALE = 0.00002f;
 float wind, current;
 float gravity, acceleration;
 
@@ -231,6 +231,7 @@ void draw_model()
 
 int main(int argc, char* argv[])
 {
+	/* Generate random seed and run a few samples to make a difference*/
 	srand(time(NULL));
 	for (int i = 0; i < rand(); i++) {
 		rand();
@@ -271,7 +272,7 @@ int main(int argc, char* argv[])
 	glm::mat4 MVP = Projection * View * Model;
 
 	// TODO: Initialize OpenGL and GLSL
-	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+	// glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LESS);
 
@@ -285,7 +286,6 @@ int main(int argc, char* argv[])
 	// END
 	init_model();
 
-
 	// Step 2: Main event loop
 	do {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -297,9 +297,9 @@ int main(int argc, char* argv[])
 	} while (!glfwWindowShouldClose(window));
 
 	// Step 3: Termination
-	// flake.vertices.clear();
 	for (int i = 0; i < flakes.size(); i++) {
-		flakes[i].destroy();
+		flakes[i].vertices.clear();
+		flakes.erase(flakes.begin() + i);
 	}
 
 	glDeleteBuffers(1, &VBID);
