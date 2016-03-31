@@ -44,11 +44,15 @@ GLuint programID;
 GLuint VAID;
 GLuint VBID;
 
+/* User-defined buffers */
+GLuint bgvertexbuffer;
+GLuint olafvertexbuffer;
+GLuint bgcolorbuffer;
+GLuint whitecolorbuffer;
+GLuint olafcolorbuffer;
+
 /* For coloring objects */
-GLuint vertexbuffer;
-GLuint colorbuffer;
-GLuint whitebuffer;
-static const GLfloat g_vertex_buffer_data[] = {
+static const GLfloat bg_vertex_buffer_data[] = {
     -1.2f, 1.0f, 0.0f,
     1.2f, 1.0f, 0.0f,
     1.2f, -0.5f, 0.0f,
@@ -63,8 +67,35 @@ static const GLfloat g_vertex_buffer_data[] = {
     1.2f, -1.0f, 0.0f,
     -1.2f, -1.0f, 0.0f,
 };
-// std::vector<float> g_color_buffer_data;
-static const GLfloat g_color_buffer_data[] = {
+static const GLfloat olaf_vertex_buffer_data[] = {
+    // TODO: Land Olaf on the ground.
+    /* Olaf's head : 4 triangles */
+    0.300f, 0.656f, 0.1f,  0.444f, 0.711f, 0.1f,  0.578f, 0.633f, 0.1f,
+    0.233f, 0.489f, 0.1f,  0.300f, 0.656f, 0.1f,  0.578f, 0.633f, 0.1f,
+    0.233f, 0.489f, 0.1f,  0.578f, 0.633f, 0.1f,  0.367f, 0.322f, 0.1f,
+    0.367f, 0.322f, 0.1f,  0.578f, 0.633f, 0.1f,  0.622f, 0.356f, 0.1f,
+    /* Olaf's upper body : 5 triangles */
+    0.367f, 0.322f, 0.1f,  0.444f, 0.144f, 0.1f,  0.333f, 0.244f, 0.1f,
+    0.367f, 0.322f, 0.1f,  0.622f, 0.356f, 0.1f,  0.444f, 0.144f, 0.1f,
+    0.444f, 0.144f, 0.1f,  0.622f, 0.356f, 0.1f,  0.644f, 0.144f, 0.1f,
+    0.622f, 0.356f, 0.1f,  0.711f, 0.300f, 0.1f,  0.644f, 0.144f, 0.1f,
+    0.644f, 0.144f, 0.1f,  0.711f, 0.300f, 0.1f,  0.733f, 0.211f, 0.1f,
+    /* Olaf's lower body : 6 triangles*/
+    0.444f, 0.144f, 0.1f,  0.644f, 0.144f, 0.1f,  0.778f, 0.100f, 0.1f,
+    0.444f, 0.144f, 0.1f,  0.778f, 0.100f, 0.1f,  0.333f, 0.044f, 0.1f,
+    0.333f, 0.044f, 0.1f,  0.778f, 0.100f, 0.1f,  0.778f, -0.167f, 0.1f,
+    0.300f, -0.167f, 0.1f,  0.333f, 0.044f, 0.1f,  0.444f, -0.233f, 0.1f,
+    0.333f, 0.044f, 0.1f,  0.778f, -0.167f, 0.1f,  0.444f, -0.233f, 0.1f,
+    0.444f, -0.233f, 0.1f,  0.778f, -0.167f, 0.1f,  0.689f, -0.267f, 0.1f,
+    /* Olaf's left foot : 3 triangles */
+    0.233f, -0.278f, 0.1f,  0.300f, -0.167f, 0.1f,  0.444f, -0.233f, 0.1f,
+    0.233f, -0.278f, 0.1f,  0.444f, -0.233f, 0.1f,  0.367f, -0.356f, 0.1f,
+    0.233f, -0.278f, 0.1f,  0.367f, -0.356f, 0.1f,  0.300f, -0.356f, 0.1f,
+    /* Olaf's right foot : 2 triangles */
+    0.578f, -0.244f, 0.1f,  0.689f, -0.267f, 0.1f,  0.689f, -0.356f, 0.1f,
+    0.556f, -0.356f, 0.1f,  0.578f, -0.244f, 0.1f,  0.689f, -0.356f, 0.1f,
+};
+static const GLfloat bg_color_buffer_data[] = {
     0.0f, 0.0f, 0.3f,
     0.0f, 0.0f, 0.3f,
     1.0f, 1.0f, 1.0f,
@@ -80,6 +111,33 @@ static const GLfloat g_color_buffer_data[] = {
     0.54f, 0.27f, 0.07f,
 };
 std::vector<float> g_white_buffer_data;
+static const GLfloat olaf_color_buffer_data[] = {
+    /* Olaf's head : 4 triangles */
+    0.9f, 0.9f, 0.9f,  0.9f, 0.9f, 0.9f,  0.9f, 0.9f, 0.9f,
+    0.9f, 0.9f, 0.9f,  0.9f, 0.9f, 0.9f,  0.9f, 0.9f, 0.9f,
+    0.9f, 0.9f, 0.9f,  0.9f, 0.9f, 0.9f,  0.9f, 0.9f, 0.9f,
+    0.9f, 0.9f, 0.9f,  0.9f, 0.9f, 0.9f,  0.9f, 0.9f, 0.9f,
+    /* Olaf's upper body : 5 triangles */
+    0.9f, 0.9f, 0.9f,  0.9f, 0.9f, 0.9f,  0.9f, 0.9f, 0.9f,
+    0.9f, 0.9f, 0.9f,  0.9f, 0.9f, 0.9f,  0.9f, 0.9f, 0.9f,
+    0.9f, 0.9f, 0.9f,  0.9f, 0.9f, 0.9f,  0.9f, 0.9f, 0.9f,
+    0.9f, 0.9f, 0.9f,  0.9f, 0.9f, 0.9f,  0.9f, 0.9f, 0.9f,
+    0.9f, 0.9f, 0.9f,  0.9f, 0.9f, 0.9f,  0.9f, 0.9f, 0.9f,
+    /* Olaf's lower body : 6 triangles */
+    0.9f, 0.9f, 0.9f,  0.9f, 0.9f, 0.9f,  0.9f, 0.9f, 0.9f,
+    0.9f, 0.9f, 0.9f,  0.9f, 0.9f, 0.9f,  0.9f, 0.9f, 0.9f,
+    0.9f, 0.9f, 0.9f,  0.9f, 0.9f, 0.9f,  0.9f, 0.9f, 0.9f,
+    0.9f, 0.9f, 0.9f,  0.9f, 0.9f, 0.9f,  0.9f, 0.9f, 0.9f,
+    0.9f, 0.9f, 0.9f,  0.9f, 0.9f, 0.9f,  0.9f, 0.9f, 0.9f,
+    0.9f, 0.9f, 0.9f,  0.9f, 0.9f, 0.9f,  0.9f, 0.9f, 0.9f,
+    /* Olaf's left foot : 3 triangles */
+    0.9f, 0.9f, 0.9f,  0.9f, 0.9f, 0.9f,  0.9f, 0.9f, 0.9f,
+    0.9f, 0.9f, 0.9f,  0.9f, 0.9f, 0.9f,  0.9f, 0.9f, 0.9f,
+    0.9f, 0.9f, 0.9f,  0.9f, 0.9f, 0.9f,  0.9f, 0.9f, 0.9f,
+    /* Olaf's right foot : 2 triangles */
+    0.9f, 0.9f, 0.9f,  0.9f, 0.9f, 0.9f,  0.9f, 0.9f, 0.9f,
+    0.9f, 0.9f, 0.9f,  0.9f, 0.9f, 0.9f,  0.9f, 0.9f, 0.9f,
+};
 
 
 std::vector<Snowflake> flakes;
@@ -108,21 +166,20 @@ float random_float(float floor, float ceiling) {
 
 /* Begin Snowflake class function definitions */
 Snowflake::Snowflake() {
+    Snowflake::curr_angle = 0.0f;
+    Snowflake::delta_angle = random_float(-2.0f, 2.0f);
+    Snowflake::scale = random_float(MIN_SCALE, MAX_SCALE);
+    Snowflake::xcor = random_float(-1.5f, 1.5f);
+    Snowflake::ycor = 0.9f;
+    Snowflake::direction = random_float(-0.005f, 0.01f);
+    Snowflake::speed = random_float(0.002f, 0.01f);
+
 	Snowflake::vertices.push_back(glm::vec3(-0.5f, -0.25f, 0.0f));
 	Snowflake::vertices.push_back(glm::vec3(0.5f, -0.25f, 0.0f));
 	Snowflake::vertices.push_back(glm::vec3(0.0f, sqrt(0.75f) - 0.25f, 0.0f));
 	Snowflake::koch_line(Snowflake::vertices[0], Snowflake::vertices[1], 2);
 	Snowflake::koch_line(Snowflake::vertices[1], Snowflake::vertices[2], 2);
 	Snowflake::koch_line(Snowflake::vertices[2], Snowflake::vertices[0], 2);
-
-	Snowflake::curr_angle = 0.0f;
-	Snowflake::delta_angle = random_float(-2.0f, 2.0f);
-	Snowflake::scale = random_float(MIN_SCALE, MAX_SCALE);
-	Snowflake::xcor = random_float(-1.5f, 1.5f);
-	Snowflake::ycor = 0.9f;
-	Snowflake::zindex = rand()/100;
-	Snowflake::direction = random_float(-0.005f, 0.01f);
-	Snowflake::speed = random_float(0.002f, 0.01f);
 }
 
 Snowflake::~Snowflake() {
@@ -172,7 +229,6 @@ void init_model(void)
     for (int i=0; i<flake.vertices.size() * 3; i++) {
         g_white_buffer_data.push_back(1.0f);
     }
-    std::cout<<g_white_buffer_data.size();
 	/* Generate multiple Koch-curves */
 	for (int i = 0; i < NUM_FLAKES; i++) {
 		Snowflake flake;
@@ -191,19 +247,30 @@ void init_model(void)
 		glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3) * flakes[i].vertices.size(), &flakes[i].vertices[0], GL_STATIC_DRAW);
 	}
 
-    /* For coloring objects */
-    glGenBuffers(1, &vertexbuffer);
-    glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data), g_vertex_buffer_data, GL_STATIC_DRAW);
+    /* Background vertex buffer */
+    glGenBuffers(1, &bgvertexbuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, bgvertexbuffer);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(bg_vertex_buffer_data), bg_vertex_buffer_data, GL_STATIC_DRAW);
 
-    glGenBuffers(1, &colorbuffer);
-    glBindBuffer(GL_ARRAY_BUFFER, colorbuffer);
-    // glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3) * g_color_buffer_data.size(), &g_color_buffer_data[0], GL_STATIC_DRAW);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(g_color_buffer_data), g_color_buffer_data, GL_STATIC_DRAW);
+    /* Background color buffer */
+    glGenBuffers(1, &bgcolorbuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, bgcolorbuffer);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(bg_color_buffer_data), bg_color_buffer_data, GL_STATIC_DRAW);
 
-    glGenBuffers(1, &whitebuffer);
-    glBindBuffer(GL_ARRAY_BUFFER, whitebuffer);
+    /* Snowlake White color buffer */
+    glGenBuffers(1, &whitecolorbuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, whitecolorbuffer);
     glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3) * g_white_buffer_data.size(), &g_white_buffer_data.front(), GL_STATIC_DRAW);
+
+    /* Olaf vertex buffer */
+    glGenBuffers(1, &olafvertexbuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, olafvertexbuffer);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(olaf_vertex_buffer_data), olaf_vertex_buffer_data, GL_STATIC_DRAW);
+
+    /* Olaf color buffer */
+    glGenBuffers(1, &olafcolorbuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, olafcolorbuffer);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(olaf_color_buffer_data), olaf_color_buffer_data, GL_STATIC_DRAW);
 }
 
 // TODO: Draw model
@@ -213,7 +280,7 @@ void draw_model()
 	glBindVertexArray(VAID);
 
     glEnableVertexAttribArray(1);
-    glBindBuffer(GL_ARRAY_BUFFER, whitebuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, whitecolorbuffer);
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, (void *) 0);
 
 	glEnableVertexAttribArray(0);
@@ -290,15 +357,27 @@ void draw_model()
 	}
 
     /* For background objects */
-    glBindBuffer(GL_ARRAY_BUFFER, colorbuffer);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, (void *) 0);
-    glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, bgvertexbuffer);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void *) 0);
+    glBindBuffer(GL_ARRAY_BUFFER, bgcolorbuffer);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, (void *) 0);
+
+
     glm::mat4 Model = glm::mat4(1.0f);
     glm::mat4 MVP = Projection * View * Model;
     GLuint MatrixID = glGetUniformLocation(programID, "MVP");
     glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVP[0][0]);
-    glDrawArrays(GL_TRIANGLES, 0, sizeof(g_vertex_buffer_data));
+    glDrawArrays(GL_TRIANGLES, 0, sizeof(bg_vertex_buffer_data));
+
+    /* For olaf */
+    glBindBuffer(GL_ARRAY_BUFFER, olafvertexbuffer);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void *) 0);
+    glBindBuffer(GL_ARRAY_BUFFER, olafcolorbuffer);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE,  0, (void *) 0);
+    glDrawArrays(GL_TRIANGLES, 0, sizeof(bg_vertex_buffer_data) + sizeof(olaf_vertex_buffer_data));
+
+
+    /* Close enabled buffers */
     glDisableVertexAttribArray(0);
     glDisableVertexAttribArray(1);
 }
