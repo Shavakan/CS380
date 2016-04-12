@@ -8,10 +8,10 @@ if( CMAKE_BINARY_DIR STREQUAL CMAKE_SOURCE_DIR )
     message( FATAL_ERROR "Please select another Build Directory" )
 endif()
 if( CMAKE_SOURCE_DIR MATCHES " " )
-  message( "Your Source Directory contains spaces. If you experience problems when compiling, this can be the cause." )
+    message( "Your Source Directory contains spaces. If you experience problems when compiling, this can be the cause." )
 endif()
 if( CMAKE_BINARY_DIR MATCHES " " )
-  message( "Your Build Directory contains spaces. If you experience problems when compiling, this can be the cause." )
+    message( "Your Build Directory contains spaces. If you experience problems when compiling, this can be the cause." )
 endif()
 
 # Compile external dependencies
@@ -23,28 +23,28 @@ include(CreateLaunchers)
 include(MSVCMultipleProcessCompile) # /MP
 
 if(INCLUDE_DISTRIB)
-  add_subdirectory(distrib)
+    add_subdirectory(distrib)
 endif(INCLUDE_DISTRIB)
 
 include_directories(
-  ExternalProjects/glfw-3.0.3/include/GLFW/
-  ExternalProjects/glm-0.9.4.0/
-  ExternalProjects/glew-1.9.0/include/
-  .
+	ExternalProjects/glfw-3.0.3/include/GLFW/
+	ExternalProjects/glm-0.9.4.0/
+	ExternalProjects/glew-1.9.0/include/
+	.
 )
 
 set(ALL_LIBS
-  ${OPENGL_LIBRARY}
-  GLFW_303
-  GLEW_190
+	${OPENGL_LIBRARY}
+	GLFW_303
+	GLEW_190
 )
 
 add_definitions(
-  -DTW_STATIC
-  -DTW_NO_LIB_PRAGMA
-  -DTW_NO_DIRECT3D
-  -DGLEW_STATIC
-  -D_CRT_SECURE_NO_WARNINGS
+	-DTW_STATIC
+	-DTW_NO_LIB_PRAGMA
+	-DTW_NO_DIRECT3D
+	-DGLEW_STATIC
+	-D_CRT_SECURE_NO_WARNINGS
 )
 
 # Skeleton Project
@@ -62,11 +62,11 @@ target_link_libraries(SkeletonProject
 )
 
 # Xcode and Visual Studio working directories
-set_target_properties(SkeletonProject PROPERTIES XCODE_ATTRIBUTE_CONFIGURATION_BUILD_DIR "${CMAKE_CURRENT_SOURCE_DIR}/Skeleton/")
+set_target_properties(SkeletonProject PROPERTIES XCODE_ATTRIBUTE_CONFIGURATION_BUILD_DIR
+    "${CMAKE_CURRENT_SOURCE_DIR}/Skeleton/")
 create_target_launcher(SkeletonProject WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/Skeleton/")
 
-
-# Lab session 1
+# Lab1 session 1
 add_executable(Lab1
     Lab1/main.cpp
 
@@ -76,6 +76,7 @@ add_executable(Lab1
     Lab1/VertexShader.glsl
     Lab1/FragmentShader.glsl
 )
+
 target_link_libraries(Lab1
     ${ALL_LIBS}
 )
@@ -108,3 +109,21 @@ set_target_properties(Lab2 PROPERTIES XCODE_ATTRIBUTE_CONFIGURATION_BUILD_DIR
 create_target_launcher(Lab2 WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/Lab2/")
 
 
+# Homework 1
+add_executable(Homework1
+    Homework1/main.cpp
+
+    common/shader.cpp
+    common/shader.hpp
+
+    Homework1/VertexShader.glsl
+    Homework1/FragmentShader.glsl
+)
+target_link_libraries(Homework1
+    ${ALL_LIBS}
+)
+
+# Xcode and Visual Studio working directories
+set_target_properties(Homework1 PROPERTIES XCODE_ATTRIBUTE_CONFIGURATION_BUILD_DIR
+    "${CMAKE_CURRENT_SOURCE_DIR}/Homework1/")
+create_target_launcher(Homework1 WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/Homework1/")
