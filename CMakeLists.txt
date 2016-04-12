@@ -8,10 +8,10 @@ if( CMAKE_BINARY_DIR STREQUAL CMAKE_SOURCE_DIR )
 	message( FATAL_ERROR "Please select another Build Directory" )
 endif()
 if( CMAKE_SOURCE_DIR MATCHES " " )
-	message( "Your Source Directory contains spaces. If you experience problems when compiling, this can be the cause." )
+    message( "Your Source Directory contains spaces. If you experience problems when compiling, this can be the cause." )
 endif()
 if( CMAKE_BINARY_DIR MATCHES " " )
-	message( "Your Build Directory contains spaces. If you experience problems when compiling, this can be the cause." )
+    message( "Your Build Directory contains spaces. If you experience problems when compiling, this can be the cause." )
 endif()
 
 # Compile external dependencies
@@ -23,7 +23,7 @@ include(CreateLaunchers)
 include(MSVCMultipleProcessCompile) # /MP
 
 if(INCLUDE_DISTRIB)
-	add_subdirectory(distrib)
+    add_subdirectory(distrib)
 endif(INCLUDE_DISTRIB)
 
 include_directories(
@@ -49,12 +49,12 @@ add_definitions(
 
 # Skeleton Project
 add_executable(SkeletonProject
-	Skeleton/main.cpp
-	common/shader.cpp
-	common/shader.hpp
+    Skeleton/main.cpp
+    common/shader.cpp
+    common/shader.hpp
 
-	Skeleton/TransformVertexShader.glsl
-	Skeleton/ColorFragmentShader.glsl
+    Skeleton/TransformVertexShader.glsl
+    Skeleton/ColorFragmentShader.glsl
 )
 
 target_link_libraries(SkeletonProject
@@ -65,3 +65,22 @@ target_link_libraries(SkeletonProject
 set_target_properties(SkeletonProject PROPERTIES XCODE_ATTRIBUTE_CONFIGURATION_BUILD_DIR
     "${CMAKE_CURRENT_SOURCE_DIR}/Skeleton/")
 create_target_launcher(SkeletonProject WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/Skeleton/")
+
+# Lab 1
+add_executable(Lab1
+    Lab1/main.cpp
+    common/shader.cpp
+    common/shader.hpp
+
+    Lab1/VertexShader.glsl
+    Lab1/FragmentShader.glsl
+)
+
+target_link_libraries(Lab1
+    ${ALL_LIBS}
+)
+
+# Xcode and Visual Studio working directories
+set_target_properties(Lab1 PROPERTIES XCODE_ATTRIBUTE_CONFIGURATION_BUILD_DIR
+    "${CMAKE_CURRENT_SOURCE_DIR}/Lab1/")
+create_target_launcher(Lab1 WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/Lab1/")
