@@ -5,7 +5,7 @@ project (CS380)
 find_package(OpenGL REQUIRED)
 
 if( CMAKE_BINARY_DIR STREQUAL CMAKE_SOURCE_DIR )
-    message( FATAL_ERROR "Please select another Build Directory" )
+	message( FATAL_ERROR "Please select another Build Directory" )
 endif()
 if( CMAKE_SOURCE_DIR MATCHES " " )
 	message( "Your Source Directory contains spaces. If you experience problems when compiling, this can be the cause." )
@@ -27,40 +27,41 @@ if(INCLUDE_DISTRIB)
 endif(INCLUDE_DISTRIB)
 
 include_directories(
-  ExternalProjects/glfw-3.0.3/include/GLFW/
-  ExternalProjects/glm-0.9.4.0/
-  ExternalProjects/glew-1.9.0/include/
-  .
+	ExternalProjects/glfw-3.0.3/include/GLFW/
+	ExternalProjects/glm-0.9.4.0/
+	ExternalProjects/glew-1.9.0/include/
+	.
 )
 
 set(ALL_LIBS
-  ${OPENGL_LIBRARY}
-  GLFW_303
-  GLEW_190
+	${OPENGL_LIBRARY}
+	GLFW_303
+	GLEW_190
 )
 
 add_definitions(
-  -DTW_STATIC
-  -DTW_NO_LIB_PRAGMA
-  -DTW_NO_DIRECT3D
-  -DGLEW_STATIC
-  -D_CRT_SECURE_NO_WARNINGS
+	-DTW_STATIC
+	-DTW_NO_LIB_PRAGMA
+	-DTW_NO_DIRECT3D
+	-DGLEW_STATIC
+	-D_CRT_SECURE_NO_WARNINGS
 )
 
 # Skeleton Project
 add_executable(SkeletonProject
-  Skeleton/main.cpp
-  common/shader.cpp
-  common/shader.hpp
+	Skeleton/main.cpp
+	common/shader.cpp
+	common/shader.hpp
 
-  Skeleton/TransformVertexShader.glsl
-  Skeleton/ColorFragmentShader.glsl
+	Skeleton/TransformVertexShader.glsl
+	Skeleton/ColorFragmentShader.glsl
 )
 
 target_link_libraries(SkeletonProject
-  ${ALL_LIBS}
+	${ALL_LIBS}
 )
 
 # Xcode and Visual Studio working directories
-set_target_properties(SkeletonProject PROPERTIES XCODE_ATTRIBUTE_CONFIGURATION_BUILD_DIR "${CMAKE_CURRENT_SOURCE_DIR}/Skeleton/")
+set_target_properties(SkeletonProject PROPERTIES XCODE_ATTRIBUTE_CONFIGURATION_BUILD_DIR
+    "${CMAKE_CURRENT_SOURCE_DIR}/Skeleton/")
 create_target_launcher(SkeletonProject WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/Skeleton/")
