@@ -145,8 +145,8 @@ int main(int argc, char* argv[])
 
     Projection = glm::perspective(45.0f, 4.0f / 3.0f, 0.1f, 100.0f);
     View = glm::lookAt(glm::vec3(0, 0, 2),
-                                 glm::vec3(0, 0, 0),
-                                 glm::vec3(0, 1, 0));
+                       glm::vec3(0, 0, 0),
+                       glm::vec3(0, 1, 0));
     glm::mat4 Model = glm::mat4(1.0f);
     glm::mat4 MVP = Projection * View * Model;
 
