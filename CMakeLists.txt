@@ -62,11 +62,11 @@ target_link_libraries(SkeletonProject
 )
 
 # Xcode and Visual Studio working directories
-set_target_properties(SkeletonProject PROPERTIES XCODE_ATTRIBUTE_CONFIGURATION_BUILD_DIR "${CMAKE_CURRENT_SOURCE_DIR}/Skeleton/")
+set_target_properties(SkeletonProject PROPERTIES XCODE_ATTRIBUTE_CONFIGURATION_BUILD_DIR
+    "${CMAKE_CURRENT_SOURCE_DIR}/Skeleton/")
 create_target_launcher(SkeletonProject WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/Skeleton/")
 
-
-# Lab session 1
+# Lab1 session 1
 add_executable(Lab1
     Lab1/main.cpp
 
@@ -108,3 +108,21 @@ set_target_properties(Lab2 PROPERTIES XCODE_ATTRIBUTE_CONFIGURATION_BUILD_DIR
 create_target_launcher(Lab2 WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/Lab2/")
 
 
+# Homework 1
+add_executable(Homework1
+    Homework1/main.cpp
+
+    common/shader.cpp
+    common/shader.hpp
+
+    Homework1/VertexShader.glsl
+    Homework1/FragmentShader.glsl
+)
+target_link_libraries(Homework1
+    ${ALL_LIBS}
+)
+
+# Xcode and Visual Studio working directories
+set_target_properties(Homework1 PROPERTIES XCODE_ATTRIBUTE_CONFIGURATION_BUILD_DIR
+    "${CMAKE_CURRENT_SOURCE_DIR}/Homework1/")
+create_target_launcher(Homework1 WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/Homework1/")
