@@ -5,7 +5,7 @@ project (CS380)
 find_package(OpenGL REQUIRED)
 
 if( CMAKE_BINARY_DIR STREQUAL CMAKE_SOURCE_DIR )
-	message( FATAL_ERROR "Please select another Build Directory" )
+    message( FATAL_ERROR "Please select another Build Directory" )
 endif()
 if( CMAKE_SOURCE_DIR MATCHES " " )
     message( "Your Source Directory contains spaces. If you experience problems when compiling, this can be the cause." )
@@ -58,7 +58,7 @@ add_executable(SkeletonProject
 )
 
 target_link_libraries(SkeletonProject
-	${ALL_LIBS}
+    ${ALL_LIBS}
 )
 
 # Xcode and Visual Studio working directories
@@ -66,9 +66,11 @@ set_target_properties(SkeletonProject PROPERTIES XCODE_ATTRIBUTE_CONFIGURATION_B
     "${CMAKE_CURRENT_SOURCE_DIR}/Skeleton/")
 create_target_launcher(SkeletonProject WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/Skeleton/")
 
-# Lab 1
+
+# Lab session 1
 add_executable(Lab1
     Lab1/main.cpp
+
     common/shader.cpp
     common/shader.hpp
 
@@ -84,3 +86,25 @@ target_link_libraries(Lab1
 set_target_properties(Lab1 PROPERTIES XCODE_ATTRIBUTE_CONFIGURATION_BUILD_DIR
     "${CMAKE_CURRENT_SOURCE_DIR}/Lab1/")
 create_target_launcher(Lab1 WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/Lab1/")
+
+
+# Lab session 2
+add_executable(Lab2
+    Lab2/main.cpp
+
+    common/shader.cpp
+    common/shader.hpp
+    common/model.cpp
+    common/model.hpp
+
+    Lab2/VertexShader.glsl
+    Lab2/FragmentShader.glsl
+)
+target_link_libraries(Lab2
+    ${ALL_LIBS}
+)
+
+# Xcode and Visual Studio working directories
+set_target_properties(Lab2 PROPERTIES XCODE_ATTRIBUTE_CONFIGURATION_BUILD_DIR
+    "${CMAKE_CURRENT_SOURCE_DIR}/Lab2/")
+create_target_launcher(Lab2 WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/Lab2/")
