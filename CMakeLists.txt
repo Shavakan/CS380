@@ -127,3 +127,26 @@ target_link_libraries(Homework1
 set_target_properties(Homework1 PROPERTIES XCODE_ATTRIBUTE_CONFIGURATION_BUILD_DIR
     "${CMAKE_CURRENT_SOURCE_DIR}/Homework1/")
 create_target_launcher(Homework1 WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/Homework1/")
+
+
+# Project 2: Object manipulation with arcball
+add_executable(Homework2
+    Homework2/main.cpp
+    common/shader.cpp
+    common/shader.hpp
+    common/model.cpp
+    common/model.hpp
+    common/geometry.hpp
+    common/affine.hpp
+    common/arcball.hpp
+    Homework2/VertexShader.glsl
+    Homework2/FragmentShader.glsl
+)
+target_link_libraries(Homework2
+    ${ALL_LIBS}
+)
+
+# Xcode and Visual Studio working directories
+set_target_properties(Homework2 PROPERTIES XCODE_ATTRIBUTE_CONFIGURATION_BUILD_DIR
+    "${CMAKE_CURRENT_SOURCE_DIR}/Homework2/")
+create_target_launcher(Homework2 WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/Homework2/")
